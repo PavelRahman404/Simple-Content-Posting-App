@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 function renderPostTable() {
   return (
@@ -18,8 +18,8 @@ function renderPostTable() {
             <td>Post 1 Title</td>
             <td>Post 1 Content</td>
             <td>
-              <button className="btn btn-secondary btn-lg ml-0 mx-3 my-3">Update</button>
-              <button className="btn btn-danger btn-lg ">Delete</button>
+              <button className="btn btn-secondary btn-lg mx-4 my-3">Update</button>
+              <button className="btn btn-danger btn-lg">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -29,11 +29,35 @@ function renderPostTable() {
 }
 
 export default function App() {
+   const [post,setPost] = useState([]);
+
+   function getPosts() {
+      const url = 'https://localhost:7012/get-all-posts';
+
+      fetch(url,{
+         method:'GET'
+      })
+      .then(respone=> respone.json())
+      .then(postsFromServer=>{
+         console.log(postsFromServer);
+         setPost(postsFromServer);
+      })
+      .catch(error=>{
+         console.log(error);
+         alert(error)
+      });
+   }
   return (
     <div className="container">
-      <div className="row min-vh-100">
+      <div className="row ">
         <div className="col d-flex flex-column justify-content-center align-items-center">
-          <h1>Hello world</h1>
+          <div>
+            <h1>Content Post App</h1>
+          </div>
+          <div className="mt-5">
+            <button onClick={getPosts} className="btn btn-dark btn-lg w-100">Get posts from Server</button>
+            <button onClick={()=>{}} className="btn btn-secondary btn-lg w-100 mt-4">Create new Post</button>
+          </div>
           {renderPostTable()}
         </div>
       </div>
